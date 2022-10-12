@@ -108,7 +108,7 @@ const TopPlay = () => {
         >
           {topPlays?.map((song, i) => {
             return (<SwiperSlide
-              key={song?.id}
+              key={song.key}
               style={{ width: '25%', height: 'auto' }}
               className="shadow-lg rounded-full animate-slideright"
             >
