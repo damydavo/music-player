@@ -12,7 +12,7 @@ import { useGetTopChartsQuery } from "../redux/services/shazamCore";
 import 'swiper/css';
 import 'swiper/css/free-mode'
 
-const TopChartCard = ({ song, i }) => (
+const TopChartCard = ({ song, i, isPlaying, activeSong, handlePause, handlePlay }) => (
   <div className="flex w-full flex-row items-center hover:bg-[#4c426e] py-2 p-4 rounded-lg cursor-point mb-2">
     <h3 className="font-bold text-base text-white mr-3">{i + 1}</h3>
     <div className="flex-1 flex flex-row items-center justify-between">
@@ -30,6 +30,13 @@ const TopChartCard = ({ song, i }) => (
 
       </div>
     </div>
+    <PlayPause
+      isPlaying={isPlaying}
+      activeSong={activeSong}
+      handlePause={handlePause}
+      handlePlay={handlePlay}
+      song={song}
+    />
   </div>
 )
 
@@ -48,15 +55,15 @@ const TopPlay = () => {
   const topPlays = data?.slice(0, 5);
 
 
-  // const handlePlay = () => {
-  //   dispatch(setActiveSong({ song, data, i }))
-  //   dispatch(playPause(true))
-  // }
+  const handlePlay = (song, i) => {
+    dispatch(setActiveSong({ song, i, data }))
+    dispatch(playPause(true))
+  }
 
-  // const handlePause = () => {
-  //   dispatch(playPause(false))
+  const handlePause = () => {
+    dispatch(playPause(false))
 
-  // }
+  }
 
   return (
     <div ref={divRef} className="xl:ml-6 ml-0 xl:mb-0 mb-6 flex-1 xl:max-w-[500px] max-w-full flex-col">
@@ -64,13 +71,20 @@ const TopPlay = () => {
         <div className="flex flex-row justify-between items-center">
           <h2 className="text-white font-bold text-2xl">Top Charts</h2>
           <Link to='/top-charts'>
-            <p className="text-gray-300 text-base cursor-pointer">See More</p>
+            {/* <p className="text-gray-300 text-base cursor-pointer">See More</p> */}
           </Link>
         </div>
         <div className="mt-4 flex flex-col gap-1">
           {topPlays?.map((song, i) => {
             return (
-              <TopChartCard key={song.key} song={song} i={i} />
+              <TopChartCard
+                key={song.key}
+                song={song}
+                i={i}
+                isPlaying={isPlaying}
+                activeSong={activeSong}
+                handlePause={handlePause}
+                handlePlay={() => handlePlay(song, i)} />
             )
           })}
         </div>
